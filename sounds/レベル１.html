@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>袋を完成させろ！ レベル1</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:10px;
+    font-family:sans-serif;
+    background:#fff8e8;
+    text-align:center;
+}
+
+/* ヘッダー */
+
+header{
+    background:#d6001c;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+h1{
+    margin:0;
+    font-size:28px;
+}
+
+#questionCounter{
+    font-size:18px;
+    margin-top:5px;
+}
+
+/* 商品エリア */
+
+#topArea{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+}
+
+#productArea{
+    flex:2;
+}
+
+#bag{
+    flex:1;
+    margin-top:0;
+}
+#productArea{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+#productName{
+    color:#d6001c;
+    font-size:24px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+#productImage{
+    width:100%;
+    max-width:320px;
+    border-radius:12px;
+}
+
+#productWrap{
+    position:relative;
+    display:inline-block;
+}
+
+#overlayImage{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:none;
+    pointer-events:none;
+}
+
+/* ステージタイトル */
+
+#stageTitle{
+    background:#ffd54f;
+    padding:10px;
+    border-radius:10px;
+    margin:10px 0;
+    font-weight:bold;
+    font-size:20px;
+}
+
+/* エフェクト */
+
+#effectArea{
+    min-height:70px;
+    font-size:32px;
+    margin:10px;
+    font-weight:bold;
+}
+
+/* 袋 */
+
+#bag{
+    background:white;
+    border:3px dashed #d6001c;
+    border-radius:12px;
+    padding:15px;
+    min-height:120px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+#bag h3{
+    margin-top:0;
+}
+
+.bagItem{
+    display:inline-block;
+    margin:5px;
+    padding:8px;
+    background:#fff4c2;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.bagItem img{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+    vertical-align:middle;
+}
+
+/* 候補 */
+
+#choices{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+}
+
+.choice{
+    background:white;
+    border:2px solid #ccc;
+    border-radius:12px;
+    padding:8px;
+    width:110px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.choice:hover{
+    transform:scale(1.05);
+}
+
+.choice.selected{
+    border:4px solid #d6001c;
+}
+
+.choice img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+}
+
+/* ボタン */
+
+button{
+    background:#d6001c;
+    color:white;
+    border:none;
+    border-radius:10px;
+    padding:12px 30px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+/* メッセージ */
+
+#message{
+    margin-top:15px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* スマホ */
+
+@media(max-width:600px){
+
+    h1{
+        font-size:22px;
+    }
+
+    #productName{
+        font-size:20px;
+    }
+
+    .choice{
+        width:95px;
+    }
+
+    .choice img{
+        width:70px;
+        height:70px;
+    }
+}
+
+/* 商品登場アニメ */
+
+
+#popup{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+#popupContent{
+    background:white;
+    width:85%;
+    max-width:350px;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+#popupContent h2{
+    color:#d6001c;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>袋を完成させろ！</h1>
+    <div id="questionCounter">1 / 17</div>
+</header>
+
+<div id="topArea">
+
+    <div id="productArea">
+
+        <div id="productWrap">
+
+            <img id="productImage"
+                 class="drop"
+                 src="">
+
+            <img id="overlayImage"
+                 src="">
+
+        </div>
+
+        <h2 id="productName"></h2>
+
+    </div>
+
+    <div id="bag">
+
+        <h3>📦 袋</h3>
+
+    </div>
+
+</div>
+
+
+<div id="stageTitle">
+ステージ1：仕上げ
+</div>
+
+<div id="effectArea"></div>
+
+<div id="choices"></div>
+
+<br>
+
+<button onclick="nextStep()">
+OK
+</button>
+
+
+<div id="message"></div>
+
+<audio id="correctSound" src="sounds/correct.mp3"></audio>
+<audio id="wrongSound" src="sounds/wrong.mp3"></audio>
+<audio id="clearSound" src="sounds/fanfare.mp3"></audio>
+
+<div id="popup">
+
+    <div id="popupContent">
+
+        <h2 id="popupTitle"></h2>
+
+        <p id="popupText"></p>
+
+       
+    </div>
+
+</div>
+
+<script>
+
+/* ==========================
+   画像一覧
+========================== */
+
+const itemImages = {
+
+    "生玉子":"images/egg.jpg",
+    "タバスコ":"images/tabasco.jpg",
+    "山椒":"images/sansyo.jpg",
+    "わさび":"images/wasabi.jpg",
+    "だし醤油":"images/dashisyouyu.jpg",
+    "きざみのり":"images/kizaminori.jpg",
+    "福神漬け":"images/fukujinzuke.jpg",
+    "辛口ソース":"images/karakutisauce.jpg",
+    "カルビだれ":"images/karubidare.jpg",
+    "かつお節":"images/katuobushi.jpg",
+    "とろろ":"images/tororo.jpg",
+    "おろし":"images/oroshiponzu.jpg",
+    "ドレッシング":"images/dressing.jpg",
+    "チョレギドレッシング":"images/tyoregidore.jpg",
+    "シーザードレッシング":"images/caesardressing.jpg",
+    "ノリフレーク":"images/norihure-ku.jpg",
+    "パセリ":"images/parsley.jpg",
+    "ゴマ":"images/goma.jpg",
+    "ナッツ":"images/nuts.jpg",
+    "粉チーズ":"images/parmesan.jpg",
+
+    "TOセット":"images/toset.jpg",
+    "スプーン":"images/spoon.jpg"
+
+};
+
+/* ==========================
+   商品データ
+========================== */
+
+const questions = [
+
+{
+name:"ねぎ玉牛丼",
+image:"images/negitama.jpg",
+stage1:"なし",
+stage2:["生玉子"],
+reason:"ねぎ玉牛丼には生玉子が付きます。"
+},
+
+{
+name:"3種のチーズ牛丼",
+image:"images/cheese.jpg",
+stage1:"パセリ",
+stage2:["タバスコ"],
+reason:"3種のチーズ牛丼はパセリをかけて、タバスコが付きます。"
+},
+
+{
+name:"うな丼",
+image:"images/unadonn.jpg",
+stage1:"なし",
+stage2:["山椒"],
+reason:"うな丼には山椒が付きます。"
+},
+
+{
+name:"キムチ牛丼",
+image:"images/kimuti.jpg",
+stage1:"なし",
+stage2:[],
+reason:"キムチ牛丼には何も付けません。"
+},
+
+{
+name:"牛カルビ丼",
+image:"images/gyuukarubi.jpg",
+stage1:"ゴマ",
+stage2:["カルビだれ"],
+reason:"牛カルビ丼はゴマを振り、カルビだれを付けます。"
+},
+
+{
+name:"高菜明太牛丼",
+image:"images/takanamenntai.jpg",
+stage1:"なし",
+stage2:[],
+reason:"高菜明太牛丼は何も付けません。"
+},
+
+{
+name:"とりそぼろ丼",
+image:"images/torisoboro.jpg",
+stage1:"ゴマ",
+stage2:["生玉子"],
+reason:"とりそぼろ丼はゴマを振り、生玉子を付けます。"
+},
+
+{
+name:"まぐろたたき丼",
+image:"images/tataki.jpg",
+stage1:["わさび","だし醤油"],
+stage2:["きざみのり"],
+reason:"まぐろたたき丼はわさびとだし醤油をポケットに入れて、きざみのりを付けます。"
+},
+
+{
+name:"カレー",
+image:"images/curry.jpg",
+stage1:"福神漬け",
+stage2:["辛口ソース","スプーン"],
+reason:"カレーは福神漬けをのせて、辛口ソース・スプーンが付きます。"
+},
+
+{
+name:"牛あいがけチーズカレー",
+image:"images/cheesegyucurry.jpg",
+stage1:"福神漬け",
+stage2:["辛口ソース","スプーン"],
+reason:"牛あいがけチーズカレーは福神漬けをのせて、辛口ソース・スプーンが付きます。"
+},
+
+{
+name:"ビビンバ牛丼",
+image:"images/bibinba.jpg",
+stage1:"ゴマ",
+stage2:[],
+reason:"ビビンバ牛丼はゴマを振ります。"
+},
+
+{
+name:"牛まぜのっけ",
+image:"images/gyuumazenokke.jpg",
+stage1:"なし",
+stage2:["かつお節","だし醤油"],
+reason:"牛まぜのっけにはかつお節とだし醤油が付きます。"
+},
+
+{
+name:"かつぶしオクラ牛丼",
+image:"images/katubushiokura.jpg",
+stage1:"なし",
+stage2:["かつお節"],
+reason:"かつぶしオクラ牛丼にはかつお節が付きます。"
+},
+
+{
+name:"めかぶオクラ牛丼",
+image:"images/mekabuokura.jpg",
+stage1:"なし",
+stage2:["かつお節"],
+reason:"めかぶオクラ牛丼にはかつお節が付きます。"
+},
+
+{
+name:"山かけめかぶオクラ牛丼",
+image:"images/yamakakemekabuokura.jpg",
+stage1:"なし",
+stage2:["かつお節","とろろ","わさび"],
+reason:"山かけめかぶオクラ牛丼にはかつお節・とろろ・わさびが付きます。"
+},
+
+
+{
+name:"山かけわさび牛丼",
+image:"images/yamakake.jpg",
+stage1:"なし",
+stage2:["とろろ","だし醤油","わさび"],
+reason:"山かけわさび牛丼にはとろろ・だし醤油・わさびが付きます。"
+},
+
+{
+name:"おろしポン酢牛丼",
+image:"images/oroshi.jpg",
+stage1:"なし",
+stage2:["おろし"],
+reason:"おろしポン酢牛丼にはおろしが付きます。"
+},
+
+{
+name:"牛お食事サラダ",
+image:"images/gyuuosyokuji.jpg",
+stage1:"ナッツ",
+stage2:["ドレッシング","ドレッシング"],
+reason:"牛お食事サラダはナッツをかけてドレッシングを2個付けます。"
+},
+
+
+{
+    name: "チョレギサラダ",
+    image: "images/tyoregisarada.jpg",
+    stage1: "なし",
+    stage2: ["ノリフレーク","チョレギドレッシング"],
+    reason: "チョレギサラダはノリフレークとチョレギドレッシングが付きます。"
+},
+
+{
+name:"チーズ牛カルビ丼",
+image:"images/cheesegyukarubi.jpg",
+stage1:["ゴマ","パセリ"],
+stage2:["カルビだれ","タバスコ"],
+reason:"チーズ牛カルビ丼はゴマとパセリをかけて、カルビだれとタバスコを付けます。"
+},
+
+{
+name:"シーザーサラダ",
+image:"images/caesarsalad.jpg",
+stage1:"粉チーズ",
+stage2:["シーザードレッシング"],
+reason:"シーザーサラダは粉チーズをかけてシーザードレッシングを付けます。"
+}
+
+
+
+];
+
+/* ==========================
+   変数
+========================== */
+
+let currentQuestion;
+let stage = 1;
+
+let selectedStage1 = "";
+let selectedStage2 = [];
+
+let questionPool = [];
+let currentIndex = 0;
+
+/* ==========================
+   初期化
+========================== */
+
+function startGame(){
+
+    questionPool = [...questions];
+
+shuffle(questionPool);
+
+questionPool = questionPool.slice(0,10);
+    currentIndex = 0;
+
+    loadQuestion();
+}
+
+function shuffle(array){
+
+    for(let i=array.length-1;i>0;i--){
+
+        const j=Math.floor(
+            Math.random()*(i+1)
+        );
+
+        [array[i],array[j]]
+        =
+        [array[j],array[i]];
+    }
+
+}
+
+/* ==========================
+問題読み込み
+========================== */
+
+function loadQuestion(){
+
+
+if(currentIndex >= questionPool.length){
+
+    document.getElementById("clearSound").play();
+
+    document.body.innerHTML = `
+    <h1>🎉 全問終了 🎉</h1>
+    <h2>お疲れさまでした！</h2>
+    `;
+    return;
+}
+
+currentQuestion =
+questionPool[currentIndex];
+
+stage = 1;
+
+selectedStage1 = "";
+selectedStage2 = [];
+
+document.getElementById(
+    "questionCounter"
+).innerText =
+(currentIndex+1)
++ " / "
++ questionPool.length;
+
+document.getElementById(
+    "productName"
+).innerText =
+currentQuestion.name;
+
+document.getElementById(
+    "productImage"
+).src =
+currentQuestion.image;
+
+document.getElementById(
+    "overlayImage"
+).style.display = "none";
+
+
+document.getElementById(
+    "message"
+).innerHTML = "";
+
+showStage1();
+
+
+}
+
+function showOverlay(){
+
+    const overlay =
+    document.getElementById("overlayImage");
+
+    overlay.style.display = "none";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.left = "0";
+    overlay.style.top = "0";
+    overlay.style.transform = "";
+
+    if(
+        currentQuestion.name ===
+        "チーズ牛カルビ丼"
+    ){
+
+        overlay.src =
+        "images/goma_parsley.png";
+
+        overlay.style.width = "45%";
+        overlay.style.height = "auto";
+        overlay.style.left = "28%";
+        overlay.style.top = "25%";
+
+        overlay.style.display = "block";
+
+        return;
+    }
+
+    if(selectedStage1.includes("ゴマ")){
+        overlay.src = "images/goma.png";
+        overlay.style.display = "block";
+    }
+
+    if(selectedStage1.includes("パセリ")){
+        overlay.src = "images/parsley.png";
+        overlay.style.display = "block";
+    }
+
+    if(selectedStage1.includes("粉チーズ")){
+
+        overlay.src = "images/parmesan.png";
+
+        overlay.style.width = "60%";
+        overlay.style.height = "auto";
+        overlay.style.left = "20%";
+        overlay.style.top = "10%";
+
+        overlay.style.display = "block";
+    }
+
+    if(selectedStage1.includes("福神漬け")){
+
+        overlay.src = "images/fukujinzuke.png";
+
+        overlay.style.width = "18%";
+        overlay.style.height = "auto";
+        overlay.style.left = "62%";
+        overlay.style.top = "58%";
+
+        overlay.style.display = "block";
+    }
+}
+
+/* ==========================
+ステージ1
+========================== */
+
+function showStage1(){
+
+
+document.getElementById(
+    "stageTitle"
+).innerText =
+"ステージ1：仕上げ";
+
+document.getElementById(
+    "effectArea"
+).innerHTML = "";
+
+let choices = [
+    "パセリ",
+    "ゴマ",
+    "ナッツ",
+    "粉チーズ",
+    "福神漬け"
+];
+
+if(currentQuestion.stage1 !== "なし"){
+
+    if(Array.isArray(currentQuestion.stage1)){
+
+        // まぐろたたき丼だけ専用
+        if(currentQuestion.name === "まぐろたたき丼"){
+
+            const wrongChoices = [
+                "パセリ",
+                "ゴマ",
+                "ナッツ",
+                "粉チーズ",
+                "福神漬け"
+            ];
+
+            const randomWrong =
+            wrongChoices[
+                Math.floor(
+                    Math.random() * wrongChoices.length
+                )
+            ];
+
+            choices = [
+                "わさび",
+                "だし醤油",
+                randomWrong
+            ];
+
+        }else{
+
+            // チーズ牛カルビ丼など
+            choices = [...currentQuestion.stage1];
+
+        }
+
+    }else{
+
+        choices = [currentQuestion.stage1];
+
+    }
+
+    const allStage1 = [
+        "パセリ",
+        "ゴマ",
+        "ナッツ",
+        "粉チーズ",
+        "福神漬け"
+    ];
+
+    while(choices.length < 3){
+
+        const randomItem =
+        allStage1[
+            Math.floor(
+                Math.random() * allStage1.length
+            )
+        ];
+
+        if(!choices.includes(randomItem)){
+            choices.push(randomItem);
+        }
+    }
+
+    shuffle(choices);
+
+}else{
+
+    shuffle(choices);
+
+    choices = choices.slice(0,3);
+}
+
+let html="";
+
+choices.forEach(item=>{
+
+    html += `
+    <div class="choice"
+         onclick="selectStage1('${item}')">
+
+        <img src="${itemImages[item]}">
+
+        <br>
+
+        ${item}
+
+    </div>
+    `;
+
+});
+
+document.getElementById(
+    "choices"
+).innerHTML = html;
+
+document.getElementById(
+    "bag"
+).innerHTML =
+`
+<h3>📦 袋</h3>
+<div class="bagItem">
+    <img src="images/toset.jpg">
+    TOセット
+</div>
+`;
+
+
+}
+
+function selectStage1(item){
+
+    const target = event.currentTarget;
+
+    let selected = selectedStage1
+        ? selectedStage1.split(",")
+        : [];
+
+    if(selected.includes(item)){
+        selected = selected.filter(x => x !== item);
+        target.classList.remove("selected");
+    }else{
+        selected.push(item);
+        target.classList.add("selected");
+    }
+
+    selectedStage1 = selected.join(",");
+
+
+
+
+}
+
+
+/* ==========================
+OKボタン
+========================== */
+
+function nextStep(){
+
+
+if(stage===1){
+
+    checkStage1();
+
+}else{
+
+    checkAnswer();
+
+}
+
+
+}
+
+/* ==========================
+ステージ1判定
+========================== */
+
+function checkStage1(){
+
+
+const correct =
+currentQuestion.stage1;
+
+if(Array.isArray(correct)){
+
+    let selected = selectedStage1.split(",");
+
+    selected.sort();
+    correct.sort();
+
+   if(JSON.stringify(selected) !== JSON.stringify(correct)){
+
+    showPopup(
+        "❌ 不正解",
+        "仕上げが違います。もう一度選んでください。",
+        false
+    );
+
+    return;
+}
+
+}else{
+
+if(correct==="なし"){
+
+    if(selectedStage1!==""){
+
+       showPopup(
+    "❌ 不正解",
+    "この商品は何もかけません",
+    false
+);
+
+        return;
+    }
+
+}else{
+
+    if(selectedStage1!==correct){
+
+showPopup(
+    "❌ 不正解",
+    "仕上げが違います。もう一度選んでください。",
+    false
+);
+
+        return;
+    }
+
+}}
+showOverlay();
+showEffect();
+
+setTimeout(()=>{
+
+    stage=2;
+
+    showStage2();
+
+},1000);
+
+
+}
+
+/* ==========================
+エフェクト
+========================== */
+
+function showEffect(){
+
+let text="";
+
+/* まぐろたたき丼専用 */
+if(
+    currentQuestion.name ===
+    "まぐろたたき丼"
+){
+
+    text =
+    "🐟 ワサビと醤油をポケットに入れました";
+
+/* チーズ牛カルビ丼専用 */
+}else if(
+    currentQuestion.name ===
+    "チーズ牛カルビ丼"
+){
+
+    text =
+    "🌾🌿 ゴマとパセリを掛けました";
+
+}else{
+
+    switch(selectedStage1){
+
+        case "ゴマ":
+            text="🌾 ゴマを掛けました";
+            break;
+
+        case "パセリ":
+            text="🌿 パセリを掛けました";
+            break;
+
+        case "ナッツ":
+            text="🥜 ナッツを掛けました";
+            break;
+
+        case "粉チーズ":
+            text="🧀 粉チーズを掛けました";
+            break;
+
+        case "福神漬け":
+            text="🍛 福神漬けをのせました";
+            break;
+
+        default:
+            text="✅ 何も掛けません";
+    }
+
+}
+
+document.getElementById(
+    "effectArea"
+).innerHTML = text;
+
+}
+
+
+/* ==========================
+ステージ2
+========================== */
+
+function showStage2(){
+
+
+document.getElementById(
+    "stageTitle"
+).innerText =
+"ステージ2：袋詰め";
+
+buildBag();
+
+createChoices();
+
+
+}
+
+/* ==========================
+3択生成
+========================== */
+
+function createChoices(){
+
+
+let answers =
+[...currentQuestion.stage2];
+
+const allItems = [
+
+    "生玉子",
+    "タバスコ",
+    "山椒",
+    "わさび",
+    "だし醤油",
+    "きざみのり",
+    "辛口ソース",
+    "カルビだれ",
+    "かつお節",
+    "とろろ",
+    "おろし",
+    "ドレッシング",
+    "シーザードレッシング",
+    "スプーン"
+
+];
+
+/* ここ追加 */
+
+let wrongItems = [...allItems];
+
+if(currentQuestion.name === "まぐろたたき丼"){
+
+    wrongItems = wrongItems.filter(
+        item =>
+        item !== "わさび" &&
+        item !== "だし醤油"
+    );
+}
+
+/* ここまで追加 */
+
+let choices = [...answers];
+
+while(choices.length < 3){
+
+    let randomItem =
+    wrongItems[
+    Math.floor(
+    Math.random()
+    * wrongItems.length
+    )];
+
+    if(
+        !choices.includes(randomItem)
+    ){
+        choices.push(randomItem);
+    }
+}
+
+shuffle(choices);
+
+let html="";
+
+choices.forEach(item=>{
+
+    html += `
+    <div class="choice"
+         onclick="addItem('${item}')">
+
+        <img src="${itemImages[item]}">
+
+        <br>
+
+        ${item}
+
+    </div>
+    `;
+
+});
+
+document.getElementById(
+    "choices"
+).innerHTML = html;
+
+
+}
+
+/* ==========================
+袋へ追加
+========================== */
+
+function addItem(item){
+
+
+selectedStage2.push(item);
+
+buildBag();
+
+
+}
+
+/* ==========================
+袋表示
+========================== */
+
+function buildBag(){
+
+
+let html = `
+<h3>📦 袋</h3>
+
+<div class="bagItem">
+    <img src="images/toset.jpg">
+    TOセット
+</div>
+`;
+
+selectedStage2.forEach(
+(item,index)=>{
+
+    html += `
+    <div class="bagItem"
+         onclick="removeItem(${index})">
+
+        <img src="${itemImages[item]}">
+
+        ${item}
+
+    </div>
+    `;
+
+});
+
+document.getElementById(
+    "bag"
+).innerHTML = html;
+
+
+}
+
+/* ==========================
+袋から削除
+========================== */
+
+function removeItem(index){
+
+
+selectedStage2.splice(
+    index,
+    1
+);
+
+buildBag();
+
+
+}
+
+/* ==========================
+採点
+========================== */
+
+function checkAnswer(){
+
+let correct =
+[...currentQuestion.stage2];
+
+let selected =
+[...selectedStage2];
+
+correct.sort();
+selected.sort();
+
+const ok =
+JSON.stringify(correct)
+===
+JSON.stringify(selected);
+
+if(ok){
+
+    document.getElementById("correctSound").play();
+
+    showPopup(
+        "⭕ 正解",
+        currentQuestion.reason,
+        true
+    );
+
+}else{
+
+    document.getElementById("wrongSound").play();
+
+    showPopup(
+        "❌ 不正解",
+        currentQuestion.reason,
+        false
+    );
+
+}
+
+}
+
+/* ==========================
+スタート
+========================== */
+
+function showPopup(title,text,isCorrect=true){
+
+    document.getElementById(
+        "popupTitle"
+    ).innerText = title;
+
+    document.getElementById(
+        "popupText"
+    ).innerText = text;
+
+    document.getElementById(
+        "popup"
+    ).style.display = "flex";
+
+    setTimeout(()=>{
+
+        document.getElementById(
+            "popup"
+        ).style.display = "none";
+
+        if(isCorrect){
+
+            currentIndex++;
+
+            loadQuestion();
+
+        }else{
+
+            selectedStage2=[];
+
+            buildBag();
+
+        }
+
+    },2500);
+
+}
+
+function closePopup(){
+
+    document.getElementById(
+        "popup"
+    ).style.display = "none";
+
+    currentIndex++;
+
+    loadQuestion();
+}
+
+startGame();
+
+</script>
+
+</body>
+</html>
+
+
