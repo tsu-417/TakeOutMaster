@@ -112,7 +112,7 @@ let returnFloor = 0;         // 元の階
 function getLevel3TimeLimit(floor){
 
   if(floor <= 5){
-    return 25;
+    return 30;
   }
 
   if(floor <= 8){
