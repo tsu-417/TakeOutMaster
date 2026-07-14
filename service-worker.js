@@ -2,7 +2,7 @@
    TakeOutMaster Service Worker
 ================================================= */
 
-const CACHE_NAME = "takeoutmaster-v1";
+const CACHE_NAME = "takeoutmaster-v3";
 
 /* 最初に保存しておく基本ファイル */
 const CORE_FILES = [
