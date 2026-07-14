@@ -121,6 +121,23 @@
     });
   }
 </script>
+<script>
+  async function lockPortrait() {
+    try {
+      if (
+        window.matchMedia("(display-mode: standalone)").matches &&
+        screen.orientation &&
+        screen.orientation.lock
+      ) {
+        await screen.orientation.lock("portrait");
+      }
+    } catch (error) {
+      console.log("縦向き固定に対応していません:", error);
+    }
+  }
 
+  window.addEventListener("load", lockPortrait);
+  window.addEventListener("orientationchange", lockPortrait);
+</script>
 </body>
 </html>
