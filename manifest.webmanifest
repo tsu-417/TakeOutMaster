@@ -1,16 +1,15 @@
 {
-  "id": "./",
+  "id": "/TakeOutMaster/portrait-v2",
   "name": "TakeOutMaster Roguelike",
   "short_name": "TOマスター",
   "description": "テイクアウト商品の入れ忘れ・入れ間違い防止トレーニングゲーム",
   "lang": "ja",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/TakeOutMaster/?portrait=v2",
+  "scope": "/TakeOutMaster/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "background_color": "#111111",
-  "theme_color": "#d60000",
-  "icons": [
+  "theme_color": "#d60000",  "icons": [
     {
       "src": "./images/icons/icon-192.png",
       "sizes": "192x192",
