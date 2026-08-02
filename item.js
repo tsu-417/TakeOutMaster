@@ -115,7 +115,28 @@ const PRODUCTS = [
   {id:"caesar_salad",name:"シーザーサラダ",img0:"images/product/csalad1.png",imgDone:"images/product/csalad2.png",toppings:["pcheese"],accessories:["toset","caesardre"]},
   {id:"okra_salad",name:"オクラサラダ",img0:"images/product/okurasalad1.png",imgDone:"images/product/okurasalad2.png",toppings:["okra"],accessories:["toset","dressing"]},
   {id:"beef_meal_salad",name:"牛お食事サラダ",img0:"images/product/osyokuji1.png",imgDone:"images/product/osyokuji2.png",toppings:["nuts"],accessories:["toset","dressing2"]},
-  {id:"simple_salad",name:"サラダ",img0:"images/product/salad.png",imgDone:"images/product/salad.png",toppings:[],accessories:["toset","dressing"]}
+  {id:"simple_salad",name:"サラダ",img0:"images/product/salad.png",imgDone:"images/product/salad.png",toppings:[],accessories:["toset","dressing"]},
+{
+  id:"tekkadon",
+  name:"鉄火丼",
+
+  img0:"images/product/tekkadon1.png",
+  img1:"images/product/tekkadon2.png",
+  img2:"images/product/tekkadon3.png",
+  imgDone:"images/product/tekkadon4.png",
+
+  toppings:["goma","wasabi","dashi"],
+  accessories:["toset","nori_kizami"]
+},
+
+{
+  id:"hiyashijiru",
+  name:"冷やし汁",
+  img0:"images/product/hiyashijiru.png",
+  imgDone:"images/product/hiyashijiru.png",
+  toppings:["goma"],
+  accessories:[]
+}
 ];
 
 
@@ -254,12 +275,13 @@ function createLevel3Order(){
   completedProducts.clear();
   level3CollectedToppings = [[], [], []];
   // サラダ系除外
-  const exclude = [
-    "simple_salad",
-    "okra_salad",
-    "cholegi_salad",
-    "caesar_salad"
-  ];
+const exclude = [
+  "simple_salad",
+  "okra_salad",
+  "cholegi_salad",
+  "caesar_salad",
+  "hiyashijiru"
+];
 
   const pool = PRODUCTS.filter(p => !exclude.includes(p.id));
 
@@ -381,12 +403,13 @@ function selectProduct(){
   // ★ここ追加
   completedProducts.clear();
   if(selectedLevel === 2){
-    const level2Exclude = [
-      "simple_salad",
-      "okra_salad",
-      "cholegi_salad",
-      "caesar_salad"
-    ];
+   const level2Exclude = [
+  "simple_salad",
+  "okra_salad",
+  "cholegi_salad",
+  "caesar_salad",
+  "hiyashijiru"
+];
 
     pool = PRODUCTS.filter(p => !level2Exclude.includes(p.id));
   }
