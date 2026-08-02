@@ -132,11 +132,13 @@ const PRODUCTS = [
 {
   id:"hiyashijiru",
   name:"冷やし汁",
-  img0:"images/product/hiyashijiru.png",
-  imgDone:"images/product/hiyashijiru.png",
+
+  img0:"images/product/hiyashijiru1.png",
+  imgDone:"images/product/hiyashijiru2.png",
+
   toppings:["goma"],
   accessories:[]
-}
+},
 ];
 
 
