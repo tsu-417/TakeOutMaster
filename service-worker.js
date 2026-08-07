@@ -2,7 +2,7 @@
    TakeOutMaster Service Worker
 ================================================= */
 
-const CACHE_NAME = "takeoutmaster-v3";
+const CACHE_NAME = "takeoutmaster-v4";
 
 /* 最初に保存しておく基本ファイル */
 const CORE_FILES = [
@@ -68,17 +68,43 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  event.respondWith(
-    caches.match(request)
-      .then(cachedResponse => {
+event.respondWith(
+  fetch(request)
+    .then(networkResponse => {
 
-        /* キャッシュがあれば先に表示 */
-        if (cachedResponse) {
-          return cachedResponse;
+      if (
+        networkResponse &&
+        networkResponse.status === 200 &&
+        networkResponse.type === "basic"
+      ) {
+        const responseCopy = networkResponse.clone();
+
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(request, responseCopy);
+        });
+      }
+
+      return networkResponse;
+    })
+    .catch(() => {
+
+      return caches.match(request).then(cached => {
+
+        if (cached) return cached;
+
+        if (request.mode === "navigate") {
+          return caches.match("./index.html");
         }
 
-        /* キャッシュがなければネットから取得 */
-        return fetch(request)
+        return new Response("", {
+          status: 503,
+          statusText: "Offline"
+        });
+
+      });
+
+    })
+);
           .then(networkResponse => {
 
             if (
