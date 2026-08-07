@@ -137,7 +137,7 @@ const PRODUCTS = [
   imgDone:"images/product/hiyashijiru2.png",
 
   toppings:["goma"],
-  accessories:[]
+  accessories:[toset]
 },
 ];
 
